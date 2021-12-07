@@ -9,6 +9,9 @@ namespace Project
     class Program
     {
         static void Main(string[] args) {
+            Parser P = new Parser("let var a : int ; var b : boolean in if a < 3 then b := a = 3 else b := a = 1");
+            Console.WriteLine("Done");
+            Console.ReadLine();
         }
     }
 }
