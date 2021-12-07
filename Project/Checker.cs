@@ -24,38 +24,62 @@ namespace Project
             prog.check(this);
         }
 
-        public void checkProgram(program p) {
-            p.command.check(this);
+        public object checkProgram(program p) {
+            if (p.command != null)
+                p.command.check(this);
+            return null;
         }
 
-        public void checkIfCommand(IfStatement f) {
-            Type expType = f.exp.check(this);
+        public object checkIfCommand(IfStatement f) {
+            Type expType = Type.error;
+            if (f.exp != null)
+                expType = (Type) f.exp.check(this);
             if (!expType.equals(Type.boolean))
                 Console.WriteLine("ERROR: if expression must be boolean");
-            f.thenCommand.check(this);
-            f.elseCommand.check(this);
+            if (f.thenCommand != null)
+                f.thenCommand.check(this);
+            if (f.elseCommand != null)
+                f.elseCommand.check(this);
+
+            return null;
         }
 
-        public void checkAssignCommand(AssignmentCommand com) {
-            SingleDeclaration dec = com.vName.check(this);
-            Type expType = com.exp.check(this);
-            if (!dec.type.type.equals(expType))
+        public object checkAssignCommand(AssignmentCommand com) {
+            SingleDeclaration dec = null;
+            Type expType = Type.error;
+            if (com.vName != null)
+                dec = (SingleDeclaration) com.vName.check(this);
+            if (com.exp != null)
+                expType = (Type) com.exp.check(this);
+            if (dec != null && !dec.type.type.equals(expType))
                 Console.WriteLine("Error: cannot assign value to variable " + dec.vName.Spelling);
+            return null;
         }
 
-        public void checkLetCommand(LetCommand com) {
+        public object checkLetCommand(LetCommand com) {
             idTable.openScope();
-            com.declaration.check(this);
-            com.command.check(this);
+            if (com.declaration != null)
+                com.declaration.check(this);
+            if (com.command != null)
+                com.command.check(this);
             idTable.closeScope();
+            return null;
         }
 
         public Type checkExpression(Expression exp) {
-            Type T1 = exp.P1.check(this);
-            Type T2 = exp.P2.check(this);
-            OperatorDeclaration OpDec = exp.O.check(this);
-            
-            Type result = OpDec.getType(T1, T2);
+            Type T1 = Type.error, T2 = Type.error, result = Type.error;
+            OperatorDeclaration OpDec = null;
+            if (exp.P1 != null)
+                T1 = (Type) exp.P1.check(this);
+            if (exp.P2 != null)
+                T2 = (Type) exp.P2.check(this);
+            if (exp.O != null)
+                OpDec = (OperatorDeclaration)exp.O.check(this);
+
+            if (OpDec != null)
+                result = OpDec.getType(T1, T2);
+           
+
             if (result == Type.error)
                 Console.WriteLine("Error: Invalid type match in expression");
 
@@ -64,7 +88,7 @@ namespace Project
 
         public Type checkIdentifier(IdentifierPE identifier) {
             if (identifier.T is VName) {
-                SingleDeclaration dec = ((VName)identifier.T).check(this);
+                SingleDeclaration dec = (SingleDeclaration) ((VName)identifier.T).check(this);
                 identifier.type = dec.type.type;
                 identifier.variable = true;
             } else if (identifier.T is IntLit) {
@@ -79,17 +103,24 @@ namespace Project
         }
 
         public Type checkBracketsPE(BracketsPE bracketsPE) {
-            return bracketsPE.E.check(this);
+            if (bracketsPE.E != null)
+                return (Type) bracketsPE.E.check(this);
+            return Type.error;
         }
 
-        public void checkSeqDeclaration(SequentialDeclaration seqDec) {
-            seqDec.declaration1.check(this);
-            seqDec.declaration2.check(this);
+        public object checkSeqDeclaration(SequentialDeclaration seqDec) {
+            if (seqDec.declaration1 != null)
+                seqDec.declaration1.check(this);
+            if (seqDec.declaration2 != null)
+                seqDec.declaration2.check(this);
+            return null;
         }
 
-        public void checkSingleDeclaration(SingleDeclaration dec) {
-            dec.type.check(this);
+        public object checkSingleDeclaration(SingleDeclaration dec) {
+            if (dec.type != null)
+                dec.type.check(this);
             idTable.add(dec);
+            return null;
         }
 
         public SingleDeclaration checkVName(VName vName) {

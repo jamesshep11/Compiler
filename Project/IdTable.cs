@@ -46,9 +46,16 @@ namespace Project
 
         public void closeScope() {
             level--;
+
+            // Find records to remove
+            ArrayList remove = new ArrayList();
             foreach (ArrayList row in idTable)
                 if ((int)row[0] > level)
-                    idTable.Remove(row);
+                    remove.Add(row);
+
+            // remove records
+            foreach (ArrayList row in remove)
+                idTable.Remove(row);
         }
 
     }

@@ -8,7 +8,7 @@ namespace Project
 {
     abstract class AST
     {
-        public void check(Checker checker) { }
+        public abstract Object check(Checker checker);
     }
 
     class program : AST
@@ -19,12 +19,12 @@ namespace Project
             this.command = command;
         }
 
-        public void check(Checker checker) {
-            checker.checkProgram(this);
+        public override Object check(Checker checker) {
+            return checker.checkProgram(this);
         }
     }
 
-    class Command : AST
+    abstract class Command : AST
     {
     }
 
@@ -40,8 +40,8 @@ namespace Project
             this.elseCommand = elseCommand;
         }
 
-        public void check(Checker checker) {
-            checker.checkIfCommand(this);
+        public override Object check(Checker checker) {
+            return checker.checkIfCommand(this);
         }
     }
 
@@ -55,8 +55,8 @@ namespace Project
             this.exp = exp;
         }
 
-        public void check(Checker checker) {
-            checker.checkAssignCommand(this);
+        public override Object check(Checker checker) {
+            return checker.checkAssignCommand(this);
         }
     }
 
@@ -70,8 +70,8 @@ namespace Project
             this.command = command;
         }
 
-        public void check(Checker checker) {
-            checker.checkLetCommand(this);
+        public override Object check(Checker checker) {
+            return checker.checkLetCommand(this);
         }
     }
 
@@ -87,14 +87,13 @@ namespace Project
             this.P1 = P1; this.O = O; this.P2 = P2;
         }
 
-        public Type check(Checker checker) {
+        public override Object check(Checker checker) {
             return checker.checkExpression(this);
         }
     }
 
     abstract class PrimaryExpression : AST
     {
-        public abstract Type check(Checker checker);
     }
 
     class IdentifierPE : PrimaryExpression
@@ -107,7 +106,7 @@ namespace Project
             this.T = T;
         }
 
-        public override Type check(Checker checker) {
+        public override Object check(Checker checker) {
             return checker.checkIdentifier(this);
         }
     }
@@ -120,12 +119,12 @@ namespace Project
             this.E = E;
         }
 
-        public override Type check(Checker checker) {
+        public override Object check(Checker checker) {
             return checker.checkBracketsPE(this);
         }
     }
 
-    class Declaration : AST
+    abstract class Declaration : AST
     {
     }
 
@@ -139,8 +138,8 @@ namespace Project
             this.type = type;
         }
 
-        public void check(Checker checker) {
-            checker.checkSingleDeclaration(this);
+        public override Object check(Checker checker) {
+            return checker.checkSingleDeclaration(this);
         }
     }
 
@@ -154,12 +153,12 @@ namespace Project
             this.declaration2 = declaration2;
         }
 
-        public void check(Checker checker) {
-            checker.checkSeqDeclaration(this);
+        public override Object check(Checker checker) {
+            return checker.checkSeqDeclaration(this);
         }
     }
 
-    class Terminal : AST
+    abstract class Terminal : AST
     {
         public String Spelling;
 
@@ -175,7 +174,7 @@ namespace Project
         public VName(String Spelling) : base(Spelling) {
         }
 
-        public SingleDeclaration check(Checker checker) {
+        public override Object check(Checker checker) {
             return checker.checkVName(this);
         }
     }
@@ -185,8 +184,8 @@ namespace Project
         public IntLit(String Spelling) : base(Spelling) {
         }
 
-        public void check(Checker checker) {
-            checker.checkIntLit(this);
+        public override Object check(Checker checker) {
+            return checker.checkIntLit(this);
         }
     }
 
@@ -197,7 +196,7 @@ namespace Project
         public Operator(String Spelling) : base(Spelling) {
         }
 
-        public OperatorDeclaration check(Checker checker) {
+        public override Object check(Checker checker) {
             return checker.checkOperator(this);
         }
     }
@@ -209,8 +208,8 @@ namespace Project
         public TypeDenoter(String Spelling) : base(Spelling) {
         }
 
-        public void check(Checker checker) {
-            checker.checkTypeDenoter(this);
+        public override Object check(Checker checker) {
+            return checker.checkTypeDenoter(this);
         }
     }
 
@@ -238,6 +237,10 @@ namespace Project
             
             return Type.error;
         }
+
+        public override object check(Checker checker) {
+            return null;
+        }
     }
 
     class MinusOperatorDeclaration : OperatorDeclaration
@@ -252,6 +255,10 @@ namespace Project
                 return Type.doub;
 
             return Type.error;
+        }
+
+        public override object check(Checker checker) {
+            return null;
         }
     }
 
@@ -268,6 +275,10 @@ namespace Project
 
             return Type.error;
         }
+
+        public override object check(Checker checker) {
+            return null;
+        }
     }
 
     class DivisionOperatorDeclaration : OperatorDeclaration
@@ -281,6 +292,10 @@ namespace Project
                 return Type.doub;
 
             return Type.error;
+        }
+
+        public override object check(Checker checker) {
+            return null;
         }
     }
 
@@ -296,6 +311,10 @@ namespace Project
 
             return Type.error;
         }
+
+        public override object check(Checker checker) {
+            return null;
+        }
     }
 
     class GreaterThanOperatorDeclaration : OperatorDeclaration
@@ -309,6 +328,10 @@ namespace Project
                 return Type.boolean;
 
             return Type.error;
+        }
+
+        public override object check(Checker checker) {
+            return null;
         }
     }
 
@@ -330,6 +353,10 @@ namespace Project
                 return Type.boolean;
 
             return Type.error;
+        }
+
+        public override object check(Checker checker) {
+            return null;
         }
     }
 }

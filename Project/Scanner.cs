@@ -47,7 +47,7 @@ namespace Project
 
         String BuildNextToken() {
             String Token = "";
-            while (Sentence[curPos] == ' ') curPos++;
+            while (curPos < Sentence.Length && Sentence[curPos] == ' ') curPos++;
             while ((curPos < Sentence.Length) && (Sentence[curPos] != ' ')) {
                 Token = Token + Sentence[curPos];
                 curPos++;

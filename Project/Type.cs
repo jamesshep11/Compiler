@@ -17,9 +17,7 @@ namespace Project
         }
 
         public bool equals(Type other) {
-            return this.kind == other.kind
-                || this.kind == ERROR
-                || other.kind == ERROR;
+            return this.kind == other.kind;
         }
         
         public static Type integer = new Type(INT);
